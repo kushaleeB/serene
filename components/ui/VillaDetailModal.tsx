@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { MapPin, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,7 +14,20 @@ interface VillaDetailModalProps {
   onClose: () => void;
 }
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [isMobileSheet, setIsMobileSheet] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobileSheet(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
   useEffect(() => {
     if (!villa) return;
 
@@ -26,7 +39,12 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", handleKeyDown);
 
+    const focusTimer = window.setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 120);
+
     return () => {
+      window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
     };
@@ -39,76 +57,108 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 p-0 backdrop-blur-sm sm:items-center sm:p-5"
+          transition={{ duration: 0.25 }}
+          className={cn(
+            "fixed inset-0 z-[100] flex bg-black/60 backdrop-blur-sm",
+            "items-end p-0 md:items-center md:p-6 lg:p-8"
+          )}
           onClick={onClose}
           role="dialog"
           aria-modal="true"
           aria-labelledby="villa-detail-title"
         >
           <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            initial={{
+              opacity: 0,
+              y: isMobileSheet ? "100%" : 32,
+              scale: isMobileSheet ? 1 : 0.98,
+            }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{
+              opacity: 0,
+              y: isMobileSheet ? "100%" : 24,
+              scale: isMobileSheet ? 1 : 0.98,
+            }}
+            transition={{ duration: 0.38, ease: EASE }}
             className={cn(
-              "relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden",
-              "rounded-t-[1.5rem] bg-white shadow-[var(--shadow-booking)] sm:rounded-[1.5rem]"
+              "relative flex w-full flex-col overflow-hidden bg-white shadow-[var(--shadow-booking)]",
+              "max-h-[92dvh] rounded-t-[1.5rem]",
+              "md:max-h-[88vh] md:max-w-2xl md:rounded-[1.5rem]",
+              "lg:max-w-4xl"
             )}
             onClick={(event) => event.stopPropagation()}
           >
+            <div className="sticky top-0 z-20 flex shrink-0 items-center justify-between border-b border-stone-100 bg-white/95 px-4 py-3 backdrop-blur-sm md:hidden">
+              <p className="text-sm font-medium text-heading">Villa Details</p>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={onClose}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-surface-linen text-heading transition-colors active:bg-stone-200"
+                aria-label="Close villa details"
+              >
+                <X size={20} strokeWidth={1.5} />
+              </button>
+            </div>
+
             <button
+              ref={isMobileSheet ? undefined : closeButtonRef}
               type="button"
               onClick={onClose}
-              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-heading shadow-sm transition-colors hover:bg-white"
+              className="absolute right-4 top-4 z-20 hidden h-11 w-11 items-center justify-center rounded-full bg-white/90 text-heading shadow-sm transition-colors hover:bg-white md:flex"
               aria-label="Close villa details"
             >
               <X size={20} strokeWidth={1.5} />
             </button>
 
-            <div className="overflow-y-auto">
-              <div className="relative aspect-[16/9] w-full shrink-0 sm:aspect-[21/9]">
-                <Image
-                  src={villa.image}
-                  alt={villa.alt}
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width: 896px) 100vw, 896px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                <div className="absolute bottom-5 left-6 right-16 md:bottom-6 md:left-8">
-                  <p className="label-caps text-white/80">{villa.details.guests}</p>
-                  <h2
-                    id="villa-detail-title"
-                    className="mt-1 font-display text-2xl text-white md:text-3xl"
-                  >
-                    {villa.name}
-                  </h2>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+              <div className="relative w-full shrink-0 overflow-x-auto overscroll-x-contain">
+                <div className="flex w-full snap-x snap-mandatory">
+                  <div className="relative aspect-[4/3] w-full shrink-0 snap-center md:aspect-video lg:aspect-[21/9]">
+                    <Image
+                      src={villa.image}
+                      alt={villa.alt}
+                      fill
+                      loading="lazy"
+                      className="object-cover"
+                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 672px, 896px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-5 right-5 md:bottom-6 md:left-8 md:right-20">
+                      <p className="label-caps text-white/80">{villa.details.guests}</p>
+                      <h2
+                        id="villa-detail-title"
+                        className="mt-1 font-display text-[clamp(1.5rem,4vw+0.5rem,1.875rem)] text-white lg:text-3xl"
+                      >
+                        {villa.name}
+                      </h2>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="p-6 md:p-8">
+              <div className="p-5 md:p-8">
                 <div className="flex flex-wrap items-start justify-between gap-4">
-                  <p className="flex items-center gap-1.5 text-sm text-body-muted">
+                  <p className="flex min-w-0 items-center gap-1.5 text-sm text-body-muted">
                     <MapPin size={14} strokeWidth={1.5} className="shrink-0" aria-hidden="true" />
-                    {villa.location}
+                    <span className="text-pretty">{villa.location}</span>
                   </p>
-                  <div className="text-right">
-                    <p className="text-[0.625rem] uppercase tracking-wider text-body-muted">From</p>
+                  <div className="shrink-0 text-right">
+                    <p className="text-xs uppercase tracking-wider text-body-muted">From</p>
                     <p className="font-display text-lg text-gold">
                       ${villa.price} <span className="text-sm text-body-muted">/ Night</span>
                     </p>
                   </div>
                 </div>
 
-                <p className="mt-5 text-sm leading-relaxed text-body-muted md:text-base">
+                <p className="mt-5 text-pretty text-sm leading-relaxed text-body-muted md:text-base">
                   {villa.details.longDescription}
                 </p>
 
-                <div className="mt-6 grid gap-6 sm:grid-cols-2">
+                <div className="mt-6 grid gap-6 md:grid-cols-2">
                   <div>
                     <h3 className="label-caps text-primary-container">Highlights</h3>
-                    <ul className="mt-3 space-y-2">
+                    <ul className="mt-3 space-y-2.5">
                       {villa.details.highlights.map((item) => (
                         <li
                           key={item}
@@ -123,7 +173,7 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
 
                   <div>
                     <h3 className="label-caps text-primary-container">Included</h3>
-                    <ul className="mt-3 space-y-2">
+                    <ul className="mt-3 space-y-2.5">
                       {villa.details.includes.map((item) => (
                         <li
                           key={item}
@@ -137,14 +187,14 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
                   </div>
                 </div>
 
-                <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-stone-200 pt-6">
-                  <span className="rounded-full bg-surface-linen px-3 py-1.5 text-xs font-medium text-primary-container">
+                <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-stone-200 pt-6 sm:gap-3">
+                  <span className="inline-flex min-h-8 items-center rounded-full bg-surface-linen px-3 py-1.5 text-xs font-medium text-primary-container">
                     {villa.details.size}
                   </span>
                   {villa.amenities.map((amenity) => (
                     <span
                       key={amenity.label}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#e8f3ef] px-3 py-1.5 text-xs font-medium text-primary-container"
+                      className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-[#e8f3ef] px-3 py-1.5 text-xs font-medium text-primary-container"
                     >
                       <Icon name={amenity.icon} size={13} className="text-primary-container" />
                       {amenity.label}
@@ -152,11 +202,19 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
                   ))}
                 </div>
 
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button href={villa.cta.href} variant="primary" className="flex-1 py-3 text-sm">
+                <div className="mt-8 flex flex-col gap-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:flex-row">
+                  <Button
+                    href={villa.cta.href}
+                    variant="primary"
+                    className="min-h-11 flex-1 py-3.5 text-sm"
+                  >
                     Reserve This Villa
                   </Button>
-                  <Button variant="outline" className="flex-1 py-3 text-sm" onClick={onClose}>
+                  <Button
+                    variant="outline"
+                    className="min-h-11 flex-1 py-3.5 text-sm md:hidden"
+                    onClick={onClose}
+                  >
                     Close
                   </Button>
                 </div>

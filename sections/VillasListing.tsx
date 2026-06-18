@@ -24,48 +24,65 @@ export function VillasListing({
   return (
     <section
       id={sectionId}
-      className={cn("bg-[#f5f3f3] section-py", !showHeader && "pt-0")}
-      aria-labelledby="villas-heading"
+      className={cn(
+        "overflow-x-hidden bg-[#f5f3f3] section-py",
+        !showHeader && "pt-0"
+      )}
+      {...{ "aria-labelledby": "villas-heading" }}
     >
       <Container>
-        {showHeader && (
+        {showHeader ? (
           <div className="mx-auto max-w-2xl text-center">
             <p className="label-caps text-gold">{content.eyebrow}</p>
             <h2
               id="villas-heading"
-              className="mt-3 font-display text-[1.75rem] leading-[1.3] text-primary-container md:text-[2rem]"
+              className="mt-3 font-display text-[clamp(1.5rem,3vw+0.75rem,2rem)] leading-[1.3] text-primary-container"
             >
               {content.title}
             </h2>
-            <p className="mt-4 font-body text-base leading-relaxed text-body-muted">
+            <p className="mt-4 text-pretty font-body text-base leading-relaxed text-body-muted md:text-[1.0625rem]">
               {content.description}
             </p>
           </div>
+        ) : (
+          <h2 id="villas-heading" className="sr-only">
+            {content.title}
+          </h2>
         )}
 
-        <div className={cn("grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-6", showHeader && "mt-12")}>
+        <ul
+          className={cn(
+            "grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 md:gap-7 lg:grid-cols-3 lg:gap-6",
+            showHeader && "mt-10 md:mt-12"
+          )}
+        >
           {villas.map((villa, i) => (
-            <motion.div
+            <motion.li
               key={villa.id}
-              initial={{ opacity: 0, y: 28 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
+              transition={{ duration: 0.55, delay: i * 0.08 }}
+              className="flex min-w-0"
             >
-              <VillaCard villa={villa} className="h-full" />
-            </motion.div>
+              <VillaCard villa={villa} className="h-full w-full" />
+            </motion.li>
           ))}
-        </div>
+        </ul>
 
         {showCta && (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-12 flex justify-center"
+            transition={{ duration: 0.55, delay: 0.2 }}
+            className="mt-10 flex justify-center md:mt-12"
           >
-            <Button href={content.viewAllCta.href} variant="primary">
+            <Button
+              href={content.viewAllCta.href}
+              variant="primary"
+              className="min-h-11 w-full max-w-md sm:w-auto"
+            >
               {content.viewAllCta.label}
             </Button>
           </motion.div>

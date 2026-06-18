@@ -9,30 +9,31 @@ export function CuratedMoments() {
   return (
     <section
       id="curated-moments"
-      className="bg-white section-py"
+      className="overflow-x-hidden bg-white section-py"
       aria-labelledby="curated-moments-heading"
     >
       <Container>
         <h2
           id="curated-moments-heading"
-          className="text-center font-display text-[1.75rem] text-primary-container md:text-[2rem]"
+          className="text-center font-display text-[clamp(1.5rem,3vw+0.75rem,2rem)] leading-[1.25] text-primary-container"
         >
           {curatedMomentsContent.title}
         </h2>
 
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <ul className="mt-10 grid grid-cols-1 items-stretch gap-6 md:mt-12 md:grid-cols-2 md:gap-7 lg:grid-cols-3 lg:gap-8">
           {experiences.map((experience, i) => (
-            <motion.div
+            <motion.li
               key={experience.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.6, delay: i * 0.08 }}
+              className="flex min-w-0"
             >
-              <ExperienceCard experience={experience} />
-            </motion.div>
+              <ExperienceCard experience={experience} className="w-full" />
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </Container>
     </section>
   );

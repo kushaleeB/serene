@@ -129,11 +129,12 @@ export function Navbar() {
               alt={siteConfig.logoAlt}
               width={120}
               height={32}
+              loading="lazy"
+              sizes="120px"
               className={cn(
                 "h-7 w-auto md:h-8",
                 useLightNav ? "brightness-0" : "brightness-0 invert"
               )}
-              priority
             />
           </Link>
 

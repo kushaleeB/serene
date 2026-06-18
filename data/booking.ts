@@ -13,6 +13,7 @@ export const bookingBarLabels = {
   checkIn: "Check In",
   checkOut: "Check Out",
   guests: "Guests",
+  price: "Estimated Total",
   checkInValue: "Oct 24, 2024",
   checkOutValue: "Oct 31, 2024",
   guestsValue: "2 Adults, 1 Child",

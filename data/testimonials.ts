@@ -1,5 +1,10 @@
 import type { Testimonial } from "@/types";
 
+export const testimonialsContent = {
+  eyebrow: "Testimonials",
+  title: "Stories from Our Guests",
+};
+
 export const testimonials: Testimonial[] = [
   {
     id: "testimonial-01",

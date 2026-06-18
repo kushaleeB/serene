@@ -33,6 +33,7 @@ export function Story() {
                 src={storyContent.image}
                 alt={storyContent.imageAlt}
                 fill
+                loading="lazy"
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />

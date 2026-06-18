@@ -62,6 +62,7 @@ export function BespokeExperience() {
                 src={bespokeExperienceContent.image}
                 alt={bespokeExperienceContent.imageAlt}
                 fill
+                loading="lazy"
                 className="object-cover"
                 sizes="(max-width: 1024px) 80vw, 40vw"
               />

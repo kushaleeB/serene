@@ -16,6 +16,6 @@ export {
 } from "./experiences";
 export { galleryPageContent, galleryImages } from "./gallery";
 export { amenities } from "./amenities";
-export { testimonials } from "./testimonials";
+export { testimonials, testimonialsContent } from "./testimonials";
 export { contactPageContent } from "./contact";
 export { bookingConfig, bookingBarLabels } from "./booking";

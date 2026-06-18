@@ -18,7 +18,7 @@ export function ExperiencesHero() {
           src={experiencesPageHero.backgroundImage}
           alt={experiencesPageHero.backgroundAlt}
           fill
-          priority
+          loading="lazy"
           className="object-cover object-center"
           sizes="100vw"
         />

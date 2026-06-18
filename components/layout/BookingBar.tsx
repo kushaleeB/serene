@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { bookingBarLabels, bookingConfig } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { CalendarPopover } from "@/components/ui/CalendarPopover";
 import { GuestSelectorPopover } from "@/components/ui/GuestSelectorPopover";
 import { cn } from "@/utils/cn";
+import { calculateStayTotal, formatStayPrice } from "@/utils/booking-price";
 import {
   addDays,
   formatDisplayDate,
@@ -34,6 +35,11 @@ export function BookingBar({ className, id }: BookingBarProps) {
   const [children, setChildren] = useState(DEFAULT_CHILDREN);
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
   const barRef = useRef<HTMLDivElement>(null);
+
+  const estimatedTotal = useMemo(
+    () => formatStayPrice(calculateStayTotal(checkIn, checkOut)),
+    [checkIn, checkOut]
+  );
 
   useEffect(() => {
     if (!activePopover) return;
@@ -68,18 +74,21 @@ export function BookingBar({ className, id }: BookingBarProps) {
       ref={barRef}
       id={id}
       className={cn(
-        "w-full overflow-visible rounded-full bg-white px-4 py-3 shadow-[var(--shadow-booking)] md:px-6 md:py-3.5",
+        "w-full overflow-visible bg-white shadow-[var(--shadow-booking)]",
+        "rounded-2xl px-4 py-4 md:rounded-3xl md:px-5 md:py-4",
+        "lg:rounded-full lg:px-6 lg:py-3.5",
         className
       )}
       role="search"
       aria-label="Check villa availability"
     >
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-0">
+      <div className="flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-x-4 md:gap-y-3 lg:flex lg:flex-row lg:items-center lg:gap-0">
         <PopoverField
           label={bookingBarLabels.checkIn}
           value={formatDisplayDate(checkIn)}
           isActive={activePopover === "checkIn"}
           onClick={() => togglePopover("checkIn")}
+          className="md:col-start-1 md:row-start-1"
         >
           {activePopover === "checkIn" && (
             <CalendarPopover
@@ -99,6 +108,7 @@ export function BookingBar({ className, id }: BookingBarProps) {
           value={formatDisplayDate(checkOut)}
           isActive={activePopover === "checkOut"}
           onClick={() => togglePopover("checkOut")}
+          className="md:col-start-2 md:row-start-1"
         >
           {activePopover === "checkOut" && (
             <CalendarPopover
@@ -118,6 +128,7 @@ export function BookingBar({ className, id }: BookingBarProps) {
           value={guestSummary}
           isActive={activePopover === "guests"}
           onClick={() => togglePopover("guests")}
+          className="md:col-start-1 md:row-start-2"
         >
           {activePopover === "guests" && (
             <GuestSelectorPopover
@@ -131,10 +142,18 @@ export function BookingBar({ className, id }: BookingBarProps) {
           )}
         </PopoverField>
 
-        <div className="shrink-0 md:ml-4">
+        <Divider />
+
+        <DisplayField
+          label={bookingBarLabels.price}
+          value={estimatedTotal}
+          className="md:col-start-2 md:row-start-2"
+        />
+
+        <div className="md:col-span-2 md:row-start-3 lg:col-span-1 lg:row-start-auto lg:ml-4 lg:shrink-0">
           <Button
             variant="primary"
-            className="w-full whitespace-nowrap px-6 py-2.5 text-sm md:w-auto"
+            className="min-h-11 w-full whitespace-nowrap px-6 py-3 text-sm lg:w-auto lg:py-2.5"
           >
             {bookingBarLabels.cta}
           </Button>
@@ -150,27 +169,29 @@ function PopoverField({
   isActive,
   onClick,
   children,
+  className,
 }: {
   label: string;
   value: string;
   isActive: boolean;
   onClick: () => void;
   children?: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="relative min-w-0 flex-1">
+    <div className={cn("relative min-w-0 lg:flex-1", className)}>
       <button
         type="button"
         onClick={onClick}
         aria-expanded={isActive}
         aria-haspopup="dialog"
         className={cn(
-          "flex w-full flex-col rounded-2xl px-3 py-1 text-left transition-colors md:px-5",
+          "flex min-h-11 w-full flex-col justify-center rounded-2xl px-3 py-2 text-left transition-colors lg:rounded-2xl lg:px-5 lg:py-1",
           isActive ? "bg-surface-linen" : "hover:opacity-80"
         )}
         aria-label={`${label}: ${value}`}
       >
-        <span className="label-caps text-[0.625rem] text-body-muted">{label}</span>
+        <span className="label-caps text-xs text-body-muted">{label}</span>
         <span className="truncate text-sm font-semibold text-heading">{value}</span>
       </button>
       {children}
@@ -178,8 +199,31 @@ function PopoverField({
   );
 }
 
+function DisplayField({
+  label,
+  value,
+  className,
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex min-h-11 flex-col justify-center rounded-2xl px-3 py-2 lg:flex-1 lg:px-5 lg:py-1",
+        className
+      )}
+      aria-label={`${label}: ${value}`}
+    >
+      <span className="label-caps text-xs text-body-muted">{label}</span>
+      <span className="truncate font-display text-sm font-semibold text-gold">{value}</span>
+    </div>
+  );
+}
+
 function Divider() {
   return (
-    <div className="hidden h-8 w-px shrink-0 bg-stone-200 md:block" aria-hidden="true" />
+    <div className="hidden h-8 w-px shrink-0 bg-stone-200 lg:block" aria-hidden="true" />
   );
 }

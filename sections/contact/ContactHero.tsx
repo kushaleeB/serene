@@ -18,7 +18,7 @@ export function ContactHero() {
           src={hero.backgroundImage}
           alt={hero.backgroundAlt}
           fill
-          priority
+          loading="lazy"
           className="object-cover object-center"
           sizes="100vw"
         />
