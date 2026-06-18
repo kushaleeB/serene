@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, type Transition, type Variants } from "framer-motion";
+import { m, type Variants } from "framer-motion";
 import { heroContent } from "@/data";
 import { BookingBar } from "@/components/layout/BookingBar";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { EASE } from "@/utils/motion";
 import { cn } from "@/utils/cn";
-
-const EASE: Transition["ease"] = [0.22, 1, 0.36, 1];
 
 function useCompactViewport() {
   const [isCompact, setIsCompact] = useState(false);
@@ -142,7 +141,7 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 text-center sm:px-6 lg:px-8">
-        <motion.div
+        <m.div
           initial="hidden"
           animate="visible"
           variants={fadeUp}
@@ -155,7 +154,7 @@ export function Hero() {
             {heroContent.subheadline}
           </p>
 
-          <motion.div
+          <m.div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
@@ -176,9 +175,9 @@ export function Hero() {
             >
               {heroContent.secondaryCta.label}
             </Button>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial="hidden"
             animate="visible"
             variants={fadeIn}
@@ -191,11 +190,11 @@ export function Hero() {
             <span className="type-body-sm max-w-[16rem] text-center text-pretty text-white/90 sm:max-w-none">
               {heroContent.ratingText}
             </span>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
 
-      <motion.div
+      <m.div
         initial="hidden"
         animate="visible"
         variants={fadeUp}
@@ -205,7 +204,7 @@ export function Hero() {
         <div className="mx-auto w-full max-w-4xl">
           <BookingBar id="booking" />
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

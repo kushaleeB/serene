@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Libre_Caslon_Text, Inter } from "next/font/google";
+import { MotionProvider } from "@/components/providers/MotionProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { siteConfig } from "@/data";
 import "@/styles/globals.css";
@@ -22,11 +23,20 @@ export const metadata: Metadata = {
   title: siteConfig.seo.title,
   description: siteConfig.seo.description,
   keywords: siteConfig.seo.keywords,
+  icons: {
+    icon: [{ url: siteConfig.logo, type: "image/png" }],
+    shortcut: siteConfig.logo,
+    apple: siteConfig.logo,
+  },
   openGraph: {
     title: siteConfig.seo.title,
     description: siteConfig.seo.description,
     images: [siteConfig.seo.ogImage],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#092420",
 };
 
 export default function RootLayout({
@@ -49,7 +59,9 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <MotionProvider>
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        </MotionProvider>
       </body>
     </html>
   );

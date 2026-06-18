@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { galleryImages, galleryPageContent } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { StaggerItem, StaggerReveal } from "@/components/ui/StaggerReveal";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { EASE } from "@/utils/motion";
 import { cn } from "@/utils/cn";
 import type { GalleryImage } from "@/types";
 
@@ -44,14 +46,15 @@ export function GalleryMasonry() {
         aria-label="Photo gallery"
       >
         <Container>
-          <ul
+          <StaggerReveal
+            as="ul"
             className={cn(
               "grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5",
               "lg:grid-flow-dense lg:grid-cols-3 lg:auto-rows-[200px] lg:gap-5"
             )}
           >
             {galleryImages.map((image, i) => (
-              <li key={image.id} className={cn("min-w-0", image.gridClass)}>
+              <StaggerItem key={image.id} as="li" className={cn("min-w-0", image.gridClass)}>
                 <button
                   type="button"
                   onClick={() => setActiveImage(image)}
@@ -88,9 +91,9 @@ export function GalleryMasonry() {
                     View Photo
                   </span>
                 </button>
-              </li>
+              </StaggerItem>
             ))}
-          </ul>
+          </StaggerReveal>
 
           <div className="mt-10 flex justify-center md:mt-12">
             <Button
@@ -106,7 +109,7 @@ export function GalleryMasonry() {
 
       <AnimatePresence>
         {activeImage && (
-          <motion.div
+          <m.div
             ref={dialogRef}
             initial={{ opacity: prefersReducedMotion ? 1 : 0 }}
             animate={{ opacity: 1 }}
@@ -127,11 +130,11 @@ export function GalleryMasonry() {
             >
               <X size={24} aria-hidden="true" />
             </button>
-            <motion.div
+            <m.div
               initial={{ scale: prefersReducedMotion ? 1 : 0.96, opacity: prefersReducedMotion ? 1 : 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: prefersReducedMotion ? 1 : 0.96, opacity: prefersReducedMotion ? 1 : 0 }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.3, ease: EASE }}
               className="relative h-[min(85dvh,720px)] w-full max-w-5xl overflow-hidden rounded-2xl"
               onClick={(event) => event.stopPropagation()}
             >
@@ -143,8 +146,8 @@ export function GalleryMasonry() {
                 className="object-contain"
                 sizes="100vw"
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

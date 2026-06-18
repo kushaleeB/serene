@@ -4,20 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { MapPin, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import type { Villa } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
+import { EASE } from "@/utils/motion";
 
 interface VillaDetailModalProps {
   villa: Villa | null;
   onClose: () => void;
 }
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
   const articleRef = useRef<HTMLElement>(null);
@@ -60,7 +59,7 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
 
   return createPortal(
     <AnimatePresence>
-      <motion.div
+      <m.div
         key="villa-detail-backdrop"
         initial={{ opacity: prefersReducedMotion ? 1 : 0 }}
         animate={{ opacity: 1 }}
@@ -75,7 +74,7 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
         aria-modal="true"
         aria-labelledby="villa-detail-title"
       >
-        <motion.article
+        <m.article
           ref={articleRef}
           initial={{
             opacity: prefersReducedMotion ? 1 : 0,
@@ -230,8 +229,8 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
                 </Button>
               </div>
             </div>
-          </motion.article>
-        </motion.div>
+          </m.article>
+        </m.div>
     </AnimatePresence>,
     document.body
   );

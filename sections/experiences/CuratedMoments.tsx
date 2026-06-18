@@ -1,6 +1,8 @@
 import { curatedMomentsContent, experiences } from "@/data";
 import { Container } from "@/components/ui/Container";
 import { ExperienceCard } from "@/components/ui/ExperienceCard";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { StaggerItem, StaggerReveal } from "@/components/ui/StaggerReveal";
 
 export function CuratedMoments() {
   return (
@@ -10,20 +12,25 @@ export function CuratedMoments() {
       aria-labelledby="curated-moments-heading"
     >
       <Container>
-        <h2
-          id="curated-moments-heading"
-          className="type-display-lg text-center text-primary-container"
-        >
-          {curatedMomentsContent.title}
-        </h2>
+        <ScrollReveal>
+          <h2
+            id="curated-moments-heading"
+            className="type-display-lg text-center text-primary-container"
+          >
+            {curatedMomentsContent.title}
+          </h2>
+        </ScrollReveal>
 
-        <ul className="mt-10 grid grid-cols-1 items-stretch gap-6 md:mt-12 md:grid-cols-2 md:gap-7 lg:grid-cols-3 lg:gap-8">
+        <StaggerReveal
+          as="ul"
+          className="mt-10 grid grid-cols-1 items-stretch gap-6 md:mt-12 md:grid-cols-2 md:gap-7 lg:grid-cols-3 lg:gap-8"
+        >
           {experiences.map((experience) => (
-            <li key={experience.id} className="flex min-w-0">
+            <StaggerItem key={experience.id} as="li" className="flex min-w-0">
               <ExperienceCard experience={experience} className="w-full" />
-            </li>
+            </StaggerItem>
           ))}
-        </ul>
+        </StaggerReveal>
       </Container>
     </section>
   );

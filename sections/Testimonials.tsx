@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { testimonials, testimonialsContent } from "@/data";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { Container } from "@/components/ui/Container";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { StaggerItem, StaggerReveal } from "@/components/ui/StaggerReveal";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
@@ -29,23 +31,30 @@ export function Testimonials() {
       aria-labelledby="testimonials-heading"
     >
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
+        <ScrollReveal className="mx-auto max-w-2xl text-center">
           <p className="label-caps text-gold">{testimonialsContent.eyebrow}</p>
           <h2 id="testimonials-heading" className="type-display-lg mt-3 text-primary-container">
             {testimonialsContent.title}
           </h2>
-        </div>
+        </ScrollReveal>
 
-        <ul className="mt-10 hidden items-stretch gap-6 md:mt-12 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 lg:gap-6">
+        <StaggerReveal
+          as="ul"
+          className="mt-10 hidden items-stretch gap-6 md:mt-12 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 lg:gap-6"
+        >
           {testimonials.map((testimonial, i) => (
-            <li
+            <StaggerItem
               key={testimonial.id}
-              className={cn("flex min-w-0", i === 2 && "md:col-span-2 md:max-w-md md:justify-self-center lg:col-span-1 lg:max-w-none")}
+              as="li"
+              className={cn(
+                "flex min-w-0",
+                i === 2 && "md:col-span-2 md:max-w-md md:justify-self-center lg:col-span-1 lg:max-w-none"
+              )}
             >
               <TestimonialCard testimonial={testimonial} className="w-full" />
-            </li>
+            </StaggerItem>
           ))}
-        </ul>
+        </StaggerReveal>
 
         <div className="mt-10 md:hidden">
           <div

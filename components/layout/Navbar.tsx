@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { navLinks, reserveCta, siteConfig } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -179,7 +179,7 @@ export function Navbar() {
 
       <AnimatePresence>
         {isMobileOpen && (
-          <motion.div
+          <m.div
             id={MOBILE_DRAWER_ID}
             ref={drawerRef}
             role="dialog"
@@ -197,7 +197,7 @@ export function Navbar() {
                   {navLinks.map((link, i) => {
                     const active = isLinkActive(pathname, link.href, link.sectionId);
                     return (
-                      <motion.li
+                      <m.li
                         key={link.sectionId}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -220,13 +220,13 @@ export function Navbar() {
                         >
                           {link.label}
                         </Link>
-                      </motion.li>
+                      </m.li>
                     );
                   })}
                 </ul>
               </nav>
 
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 12 }}
@@ -247,9 +247,9 @@ export function Navbar() {
                 >
                   {reserveCta.label}
                 </Link>
-              </motion.div>
+              </m.div>
             </Container>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </header>
