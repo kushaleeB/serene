@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { m, type Variants } from "framer-motion";
 import { heroContent } from "@/data";
+import { useHeroVideoPreload } from "@/components/layout/HomeEntry";
 import { BookingBar } from "@/components/layout/BookingBar";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
@@ -27,7 +28,8 @@ function useCompactViewport() {
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoReady, setIsVideoReady] = useState(false);
+  const { wasPreloaded } = useHeroVideoPreload();
+  const [isVideoReady, setIsVideoReady] = useState(wasPreloaded);
   const isCompact = useCompactViewport();
   const prefersReducedMotion = useReducedMotion();
 

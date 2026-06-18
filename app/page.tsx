@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { Footer } from "@/components/layout/Footer";
+import { HomeEntry } from "@/components/layout/HomeEntry";
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/sections/Hero";
 import { Story } from "@/sections/Story";
@@ -11,7 +12,7 @@ const Testimonials = dynamic(
 
 export default function Home() {
   return (
-    <>
+    <HomeEntry>
       <Navbar />
       <main id="main-content">
         <Hero />
@@ -19,6 +20,6 @@ export default function Home() {
         <Testimonials />
       </main>
       <Footer />
-    </>
+    </HomeEntry>
   );
 }
