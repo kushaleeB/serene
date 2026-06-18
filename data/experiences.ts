@@ -7,11 +7,11 @@ import type {
 } from "@/types";
 
 export const experiencesPageHero: ExperiencesPageHeroContent = {
-  eyebrow: "Experiences",
+  eyebrow: "Unforgettable Journeys",
   title: "Immerse Yourself in the Magic of Sri Lanka",
   description:
-    "From tranquil retreats to exhilarating adventures, discover the soul of the island with SERENE.",
-  scrollCta: "Scroll to Explore",
+    "From private gourmet dining to wild safari adventures, discover curated experiences designed to create lifelong memories.",
+  scrollCta: "Explore Collections",
   backgroundImage: "/img/experiences/experience_bg_img.png",
   backgroundAlt:
     "Couple on a luxury boat watching a whale tail emerge from the Indian Ocean",

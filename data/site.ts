@@ -39,9 +39,7 @@ export const heroContent: HeroContent = {
   ratingText: "4.9 from 600+ discerning guests",
   primaryCta: { label: "Reserve Your Escape", href: "/#booking" },
   secondaryCta: { label: "Explore Villas", href: "/villas" },
-  backgroundImage: "/img/hero/hero_img.png",
-  backgroundImageAlt:
-    "Luxury villa with infinity pool overlooking the Indian Ocean at dusk",
+  backgroundVideo: "/videos/hero.mp4",
 };
 
 export const storyContent: StoryContent = {

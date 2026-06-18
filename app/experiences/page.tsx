@@ -4,7 +4,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { experiencesPageHero } from "@/data";
 import { BespokeExperience } from "@/sections/experiences/BespokeExperience";
 import { CuratedMoments } from "@/sections/experiences/CuratedMoments";
-import { ExperienceSearchBarSection } from "@/sections/experiences/ExperienceSearchBarSection";
 import { ExperiencesHero } from "@/sections/experiences/ExperiencesHero";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function ExperiencesPage() {
       <Navbar />
       <main id="main-content">
         <ExperiencesHero />
-        <ExperienceSearchBarSection />
         <CuratedMoments />
         <BespokeExperience />
       </main>

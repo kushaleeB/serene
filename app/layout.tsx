@@ -38,6 +38,9 @@ export default function RootLayout({
       lang="en"
       className={`${libreCaslon.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preload" href="/videos/hero.mp4" as="video" type="video/mp4" />
+      </head>
       <body className="min-h-full flex flex-col font-body bg-background text-foreground">
         <a
           href="#main-content"

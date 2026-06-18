@@ -1,27 +1,72 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { heroContent } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
+import { cn } from "@/utils/cn";
 
 export function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    updatePreference();
+    mediaQuery.addEventListener("change", updatePreference);
+    return () => mediaQuery.removeEventListener("change", updatePreference);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleReady = () => setIsVideoReady(true);
+
+    if (video.readyState >= 3) {
+      handleReady();
+    } else {
+      video.addEventListener("canplay", handleReady);
+    }
+
+    if (prefersReducedMotion) {
+      video.pause();
+      return () => video.removeEventListener("canplay", handleReady);
+    }
+
+    video.play().catch(() => {
+      handleReady();
+    });
+
+    return () => video.removeEventListener("canplay", handleReady);
+  }, [prefersReducedMotion]);
+
   return (
     <section
       id="home"
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-primary"
       aria-label="Hero"
     >
       <div className="absolute inset-0">
-        <Image
-          src={heroContent.backgroundImage}
-          alt={heroContent.backgroundImageAlt}
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
+        <video
+          ref={videoRef}
+          autoPlay={!prefersReducedMotion}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className={cn(
+            "h-full w-full object-cover object-center transition-opacity duration-700",
+            isVideoReady ? "opacity-100" : "opacity-0"
+          )}
+          aria-hidden="true"
+        >
+          <source src={heroContent.backgroundVideo} type="video/mp4" />
+        </video>
         <div className="hero-overlay-top absolute inset-0" />
         <div className="hero-overlay-bottom absolute inset-0" />
       </div>

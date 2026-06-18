@@ -152,8 +152,7 @@ export interface HeroContent {
   ratingText: string;
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string };
-  backgroundImage: string;
-  backgroundImageAlt: string;
+  backgroundVideo: string;
 }
 
 export interface StoryContent {
