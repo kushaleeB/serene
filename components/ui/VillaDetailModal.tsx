@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { MapPin, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -22,7 +23,12 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
   const articleRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [isMobileSheet, setIsMobileSheet] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useFocusTrap(Boolean(villa), articleRef, onClose);
 
@@ -50,46 +56,48 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
     };
   }, [villa]);
 
-  return (
+  if (!isMounted || !villa) return null;
+
+  return createPortal(
     <AnimatePresence>
-      {villa && (
-        <motion.div
-          initial={{ opacity: prefersReducedMotion ? 1 : 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: prefersReducedMotion ? 1 : 0 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
+      <motion.div
+        key="villa-detail-backdrop"
+        initial={{ opacity: prefersReducedMotion ? 1 : 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: prefersReducedMotion ? 1 : 0 }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
+        className={cn(
+          "fixed inset-0 z-[100] flex bg-black/60",
+          "items-end p-0 md:items-center md:p-6 lg:p-8"
+        )}
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="villa-detail-title"
+      >
+        <motion.article
+          ref={articleRef}
+          initial={{
+            opacity: prefersReducedMotion ? 1 : 0,
+            y: prefersReducedMotion ? 0 : isMobileSheet ? "100%" : 32,
+            scale: prefersReducedMotion ? 1 : isMobileSheet ? 1 : 0.98,
+          }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{
+            opacity: prefersReducedMotion ? 1 : 0,
+            y: prefersReducedMotion ? 0 : isMobileSheet ? "100%" : 24,
+            scale: prefersReducedMotion ? 1 : isMobileSheet ? 1 : 0.98,
+          }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.38, ease: EASE }}
           className={cn(
-            "fixed inset-0 z-[100] flex bg-black/60 backdrop-blur-sm",
-            "items-end p-0 md:items-center md:p-6 lg:p-8"
+            "relative flex w-full flex-col overflow-hidden bg-white shadow-[var(--shadow-booking)]",
+            "max-h-[92dvh] rounded-t-[1.5rem]",
+            "md:max-h-[88vh] md:max-w-2xl md:rounded-[1.5rem]",
+            "lg:max-w-4xl"
           )}
-          onClick={onClose}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="villa-detail-title"
+          onClick={(event) => event.stopPropagation()}
         >
-          <motion.article
-            ref={articleRef}
-            initial={{
-              opacity: prefersReducedMotion ? 1 : 0,
-              y: prefersReducedMotion ? 0 : isMobileSheet ? "100%" : 32,
-              scale: prefersReducedMotion ? 1 : isMobileSheet ? 1 : 0.98,
-            }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{
-              opacity: prefersReducedMotion ? 1 : 0,
-              y: prefersReducedMotion ? 0 : isMobileSheet ? "100%" : 24,
-              scale: prefersReducedMotion ? 1 : isMobileSheet ? 1 : 0.98,
-            }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.38, ease: EASE }}
-            className={cn(
-              "relative flex w-full flex-col overflow-hidden bg-white shadow-[var(--shadow-booking)]",
-              "max-h-[92dvh] rounded-t-[1.5rem]",
-              "md:max-h-[88vh] md:max-w-2xl md:rounded-[1.5rem]",
-              "lg:max-w-4xl"
-            )}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="sticky top-0 z-20 flex shrink-0 items-center justify-between border-b border-stone-100 bg-white/95 px-4 py-3 backdrop-blur-sm md:hidden">
+            <div className="sticky top-0 z-20 flex shrink-0 items-center justify-between border-b border-stone-100 bg-white px-4 py-3 md:hidden">
               <p className="text-sm font-medium text-heading">Villa Details</p>
               <button
                 ref={closeButtonRef}
@@ -199,28 +207,32 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
                     </span>
                   ))}
                 </div>
+              </div>
+            </div>
 
-                <div className="mt-8 flex flex-col gap-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:flex-row">
-                  <Button
-                    href={villa.cta.href}
-                    variant="primary"
-                    className="min-h-11 flex-1 py-3.5 text-sm"
-                  >
-                    Reserve This Villa
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="min-h-11 flex-1 py-3.5 text-sm md:hidden"
-                    onClick={onClose}
-                  >
-                    Close
-                  </Button>
-                </div>
+            <div
+              className={cn(
+                "shrink-0 border-t border-stone-200 bg-white px-5 py-4 md:px-8",
+                "pb-[max(1rem,env(safe-area-inset-bottom))]"
+              )}
+            >
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button
+                  href={villa.cta.href}
+                  variant="primary"
+                  className="min-h-12 flex-1"
+                  onClick={onClose}
+                >
+                  Reserve This Villa
+                </Button>
+                <Button variant="outline" className="min-h-12 flex-1 sm:max-w-[10rem]" onClick={onClose}>
+                  Close
+                </Button>
               </div>
             </div>
           </motion.article>
         </motion.div>
-      )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

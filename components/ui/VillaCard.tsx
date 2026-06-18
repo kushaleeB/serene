@@ -83,7 +83,7 @@ export function VillaCard({ villa, className }: VillaCardProps) {
           <div className="mt-6 pt-0">
             <Button
               variant="outline"
-              className="min-h-11 w-full"
+              className="min-h-11 w-full border-primary-container font-medium text-primary-container hover:bg-primary/5"
               onClick={() => setIsDetailOpen(true)}
             >
               {villa.cta.label}
@@ -92,9 +92,10 @@ export function VillaCard({ villa, className }: VillaCardProps) {
         </div>
       </article>
 
-      {isDetailOpen && (
-        <VillaDetailModal villa={villa} onClose={() => setIsDetailOpen(false)} />
-      )}
+      <VillaDetailModal
+        villa={isDetailOpen ? villa : null}
+        onClose={() => setIsDetailOpen(false)}
+      />
     </>
   );
 }
