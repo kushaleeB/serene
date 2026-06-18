@@ -1,29 +1,18 @@
-"use client";
-
 import Image from "next/image";
 import { Check } from "lucide-react";
-import { motion } from "framer-motion";
 import { bespokeExperienceContent } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function BespokeExperience() {
-  const prefersReducedMotion = useReducedMotion();
-
   return (
     <section
-      className="bg-[#f5f3f3] section-py"
+      className="scroll-section bg-[#f5f3f3] section-py"
       aria-labelledby="bespoke-heading"
     >
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <motion.div
-            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.7 }}
-          >
+          <div>
             <p className="label-caps text-primary-container">
               {bespokeExperienceContent.eyebrow}
             </p>
@@ -48,15 +37,9 @@ export function BespokeExperience() {
                 {bespokeExperienceContent.cta.label}
               </Button>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.7, delay: prefersReducedMotion ? 0 : 0.1 }}
-            className="relative mx-auto aspect-square w-full max-w-md lg:max-w-none"
-          >
+          <div className="relative mx-auto aspect-square w-full max-w-md lg:max-w-none">
             <div className="relative h-full w-full overflow-hidden rounded-full shadow-[var(--shadow-soft)]">
               <Image
                 src={bespokeExperienceContent.image}
@@ -67,7 +50,7 @@ export function BespokeExperience() {
                 sizes="(max-width: 1024px) 80vw, 40vw"
               />
             </div>
-          </motion.div>
+          </div>
         </div>
       </Container>
     </section>

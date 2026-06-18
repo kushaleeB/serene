@@ -1,12 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import type { FeaturedVillasContent } from "@/types";
 import { villas } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { VillaCard } from "@/components/ui/VillaCard";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 interface VillasListingProps {
@@ -22,13 +20,11 @@ export function VillasListing({
   showHeader = true,
   sectionId,
 }: VillasListingProps) {
-  const prefersReducedMotion = useReducedMotion();
-
   return (
     <section
       id={sectionId}
       className={cn(
-        "overflow-x-hidden bg-[#f5f3f3] section-py",
+        "overflow-x-hidden bg-[#f5f3f3] section-py scroll-section",
         !showHeader && "pt-0"
       )}
       {...{ "aria-labelledby": "villas-heading" }}
@@ -56,31 +52,15 @@ export function VillasListing({
             showHeader && "mt-10 md:mt-12"
           )}
         >
-          {villas.map((villa, i) => (
-            <motion.li
-              key={villa.id}
-              initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{
-                duration: prefersReducedMotion ? 0 : 0.55,
-                delay: prefersReducedMotion ? 0 : i * 0.08,
-              }}
-              className="flex min-w-0"
-            >
+          {villas.map((villa) => (
+            <li key={villa.id} className="flex min-w-0">
               <VillaCard villa={villa} className="h-full w-full" />
-            </motion.li>
+            </li>
           ))}
         </ul>
 
         {showCta && (
-          <motion.div
-            initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.55, delay: prefersReducedMotion ? 0 : 0.2 }}
-            className="mt-10 flex justify-center md:mt-12"
-          >
+          <div className="mt-10 flex justify-center md:mt-12">
             <Button
               href={content.viewAllCta.href}
               variant="primary"
@@ -88,7 +68,7 @@ export function VillasListing({
             >
               {content.viewAllCta.label}
             </Button>
-          </motion.div>
+          </div>
         )}
       </Container>
     </section>

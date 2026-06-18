@@ -64,7 +64,7 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   html.lenis,
@@ -129,10 +129,13 @@
   }
 
   .glass-panel {
-    background: var(--glass);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: rgba(255, 255, 255, 0.95);
     border: 1px solid var(--glass-border);
+  }
+
+  .scroll-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 40rem;
   }
 
   .hero-overlay-top {

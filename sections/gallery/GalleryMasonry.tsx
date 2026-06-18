@@ -40,7 +40,7 @@ export function GalleryMasonry() {
     <>
       <section
         id="gallery-grid"
-        className="overflow-x-hidden bg-[#f9f9f7] pb-12 md:pb-16 lg:pb-20"
+        className="scroll-section overflow-x-hidden bg-[#f9f9f7] pb-12 md:pb-16 lg:pb-20"
         aria-label="Photo gallery"
       >
         <Container>
@@ -51,17 +51,7 @@ export function GalleryMasonry() {
             )}
           >
             {galleryImages.map((image, i) => (
-              <motion.li
-                key={image.id}
-                initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{
-                  duration: prefersReducedMotion ? 0 : 0.5,
-                  delay: prefersReducedMotion ? 0 : i * 0.04,
-                }}
-                className={cn("min-w-0", image.gridClass)}
-              >
+              <li key={image.id} className={cn("min-w-0", image.gridClass)}>
                 <button
                   type="button"
                   onClick={() => setActiveImage(image)}
@@ -98,7 +88,7 @@ export function GalleryMasonry() {
                     View Photo
                   </span>
                 </button>
-              </motion.li>
+              </li>
             ))}
           </ul>
 

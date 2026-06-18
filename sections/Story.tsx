@@ -3,30 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { storyContent } from "@/data";
 import { Container } from "@/components/ui/Container";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 export function Story() {
-  const prefersReducedMotion = useReducedMotion();
-
   return (
     <section
       id="story"
-      className="bg-surface-linen section-py"
+      className="scroll-section bg-surface-linen section-py"
       aria-labelledby="story-heading"
     >
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <motion.div
-            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto w-full max-w-md lg:max-w-none"
-          >
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
             <div
               className="absolute -left-4 -top-4 z-0 h-[88%] w-[88%] rounded-[1.25rem] bg-white/80"
               aria-hidden="true"
@@ -41,19 +31,9 @@ export function Story() {
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{
-              duration: prefersReducedMotion ? 0 : 0.7,
-              delay: prefersReducedMotion ? 0 : 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="lg:py-4"
-          >
+          <div className="lg:py-4">
             <h2 id="story-heading" className="type-display-lg text-heading">
               {storyContent.title}
             </h2>
@@ -74,7 +54,7 @@ export function Story() {
               {storyContent.cta.label}
               <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </Container>
     </section>

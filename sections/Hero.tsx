@@ -26,6 +26,7 @@ function useCompactViewport() {
 }
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const isCompact = useCompactViewport();
@@ -87,8 +88,29 @@ export function Hero() {
     return () => video.removeEventListener("canplay", handleReady);
   }, [prefersReducedMotion]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    const section = sectionRef.current;
+    if (!video || !section || prefersReducedMotion) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       className={cn(
         "relative flex min-h-screen min-h-dvh flex-col overflow-x-hidden bg-primary",

@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { navLinks, reserveCta, siteConfig } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { useScrollThreshold } from "@/hooks/use-scroll-threshold";
 import { cn } from "@/utils/cn";
 
 const MOBILE_DRAWER_ID = "mobile-nav-drawer";
@@ -32,7 +33,7 @@ function getFocusableElements(container: HTMLElement, menuButton: HTMLButtonElem
 export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const [isScrolled, setIsScrolled] = useState(false);
+  const isScrolled = useScrollThreshold(40);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -47,18 +48,6 @@ export function Navbar() {
   const toggleMobileMenu = useCallback(() => {
     setIsMobileOpen((open) => !open);
   }, []);
-
-  useEffect(() => {
-    if (!isHome) {
-      setIsScrolled(true);
-      return;
-    }
-
-    const onScroll = () => setIsScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isHome]);
 
   useEffect(() => {
     closeMobileMenu();
@@ -112,7 +101,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,padding] duration-300",
         useLightNav
           ? "glass-panel border-b border-stone-200/60 py-3 shadow-[var(--shadow-soft)]"
           : "bg-gradient-to-b from-black/30 to-transparent py-5"
@@ -200,7 +189,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 bg-primary/95 backdrop-blur-md lg:hidden"
+            className="fixed inset-0 z-40 bg-primary/98 lg:hidden"
           >
             <Container className="flex h-full flex-col justify-center gap-8 pt-20">
               <nav aria-label="Mobile navigation links">

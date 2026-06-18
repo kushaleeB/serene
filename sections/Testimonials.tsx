@@ -2,7 +2,6 @@
 
 import { useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { testimonials, testimonialsContent } from "@/data";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { Container } from "@/components/ui/Container";
@@ -26,7 +25,7 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="overflow-x-hidden bg-surface-linen section-py"
+      className="scroll-section overflow-x-hidden bg-surface-linen section-py"
       aria-labelledby="testimonials-heading"
     >
       <Container>
@@ -39,19 +38,12 @@ export function Testimonials() {
 
         <ul className="mt-10 hidden items-stretch gap-6 md:mt-12 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 lg:gap-6">
           {testimonials.map((testimonial, i) => (
-            <motion.li
+            <li
               key={testimonial.id}
-              initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: prefersReducedMotion ? 0 : 0.6,
-                delay: prefersReducedMotion ? 0 : i * 0.08,
-              }}
               className={cn("flex min-w-0", i === 2 && "md:col-span-2 md:max-w-md md:justify-self-center lg:col-span-1 lg:max-w-none")}
             >
               <TestimonialCard testimonial={testimonial} className="w-full" />
-            </motion.li>
+            </li>
           ))}
         </ul>
 
