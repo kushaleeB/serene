@@ -5,6 +5,7 @@ export const siteConfig: SiteConfig = {
   tagline: "Where the Indian Ocean meets timeless elegance",
   description:
     "A sanctuary of quiet, sustainable luxury on the southern coast of Sri Lanka.",
+  url: "https://serenevillas.com",
   logo: "/img/hero/logo.png",
   logoAlt: "SERENE luxury boutique villas",
   contact: {

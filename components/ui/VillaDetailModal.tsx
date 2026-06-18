@@ -7,6 +7,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { Villa } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 interface VillaDetailModalProps {
@@ -17,8 +19,12 @@ interface VillaDetailModalProps {
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
+  const articleRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [isMobileSheet, setIsMobileSheet] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  useFocusTrap(Boolean(villa), articleRef, onClose);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -31,13 +37,8 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
   useEffect(() => {
     if (!villa) return;
 
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
-    }
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
 
     const focusTimer = window.setTimeout(() => {
       closeButtonRef.current?.focus();
@@ -46,18 +47,17 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
     return () => {
       window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [villa, onClose]);
+  }, [villa]);
 
   return (
     <AnimatePresence>
       {villa && (
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: prefersReducedMotion ? 1 : 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
+          exit={{ opacity: prefersReducedMotion ? 1 : 0 }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
           className={cn(
             "fixed inset-0 z-[100] flex bg-black/60 backdrop-blur-sm",
             "items-end p-0 md:items-center md:p-6 lg:p-8"
@@ -68,18 +68,19 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
           aria-labelledby="villa-detail-title"
         >
           <motion.article
+            ref={articleRef}
             initial={{
-              opacity: 0,
-              y: isMobileSheet ? "100%" : 32,
-              scale: isMobileSheet ? 1 : 0.98,
+              opacity: prefersReducedMotion ? 1 : 0,
+              y: prefersReducedMotion ? 0 : isMobileSheet ? "100%" : 32,
+              scale: prefersReducedMotion ? 1 : isMobileSheet ? 1 : 0.98,
             }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{
-              opacity: 0,
-              y: isMobileSheet ? "100%" : 24,
-              scale: isMobileSheet ? 1 : 0.98,
+              opacity: prefersReducedMotion ? 1 : 0,
+              y: prefersReducedMotion ? 0 : isMobileSheet ? "100%" : 24,
+              scale: prefersReducedMotion ? 1 : isMobileSheet ? 1 : 0.98,
             }}
-            transition={{ duration: 0.38, ease: EASE }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.38, ease: EASE }}
             className={cn(
               "relative flex w-full flex-col overflow-hidden bg-white shadow-[var(--shadow-booking)]",
               "max-h-[92dvh] rounded-t-[1.5rem]",
@@ -126,10 +127,7 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     <div className="absolute bottom-4 left-5 right-5 md:bottom-6 md:left-8 md:right-20">
                       <p className="label-caps text-white/80">{villa.details.guests}</p>
-                      <h2
-                        id="villa-detail-title"
-                        className="mt-1 font-display text-[clamp(1.5rem,4vw+0.5rem,1.875rem)] text-white lg:text-3xl"
-                      >
+                      <h2 id="villa-detail-title" className="type-display-sm mt-1 text-white">
                         {villa.name}
                       </h2>
                     </div>
@@ -151,7 +149,7 @@ export function VillaDetailModal({ villa, onClose }: VillaDetailModalProps) {
                   </div>
                 </div>
 
-                <p className="mt-5 text-pretty text-sm leading-relaxed text-body-muted md:text-base">
+                <p className="type-body-sm mt-5 text-pretty text-body-muted md:type-body">
                   {villa.details.longDescription}
                 </p>
 

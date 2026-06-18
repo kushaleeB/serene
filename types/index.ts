@@ -14,6 +14,7 @@ export interface SiteConfig {
   name: string;
   tagline: string;
   description: string;
+  url: string;
   logo: string;
   logoAlt: string;
   contact: {

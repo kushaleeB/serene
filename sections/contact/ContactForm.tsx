@@ -6,7 +6,7 @@ import { contactPageContent } from "@/data";
 import { cn } from "@/utils/cn";
 
 const inputClass =
-  "w-full border-0 border-b border-stone-200 bg-transparent py-3 text-sm text-heading placeholder:text-stone-400 focus:border-gold focus:outline-none focus:ring-0";
+  "w-full border-0 border-b border-stone-200 bg-transparent py-3 text-sm text-heading placeholder:text-stone-400 focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2";
 
 export function ContactForm() {
   const { form } = contactPageContent;
@@ -19,12 +19,10 @@ export function ContactForm() {
 
   return (
     <div className="rounded-2xl bg-white p-8 shadow-[var(--shadow-soft)] md:p-10">
-      <h2 className="font-display text-[1.75rem] text-primary-container md:text-[2rem]">
-        {form.title}
-      </h2>
+      <h2 className="type-display-lg text-primary-container">{form.title}</h2>
 
       {submitted ? (
-        <p className="mt-8 text-sm leading-relaxed text-body-muted" role="status">
+        <p className="type-body-sm mt-8 text-body-muted" role="status">
           Thank you for your inquiry. Our concierge team will be in touch shortly.
         </p>
       ) : (
@@ -92,7 +90,7 @@ export function ContactForm() {
 
           <button
             type="submit"
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-medium text-on-primary transition-all hover:bg-primary-container hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+            className="type-btn mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-primary text-on-primary transition-colors hover:bg-primary-container [@media(hover:hover)]:hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
           >
             {form.submit}
             <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />

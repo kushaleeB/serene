@@ -187,12 +187,13 @@ function PopoverField({
         aria-haspopup="dialog"
         className={cn(
           "flex min-h-11 w-full flex-col justify-center rounded-2xl px-3 py-2 text-left transition-colors lg:rounded-2xl lg:px-5 lg:py-1",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2",
           isActive ? "bg-surface-linen" : "hover:opacity-80"
         )}
         aria-label={`${label}: ${value}`}
       >
         <span className="label-caps text-xs text-body-muted">{label}</span>
-        <span className="truncate text-sm font-semibold text-heading">{value}</span>
+        <span className="type-body-sm truncate font-semibold text-heading">{value}</span>
       </button>
       {children}
     </div>
@@ -217,7 +218,7 @@ function DisplayField({
       aria-label={`${label}: ${value}`}
     >
       <span className="label-caps text-xs text-body-muted">{label}</span>
-      <span className="truncate font-display text-sm font-semibold text-gold">{value}</span>
+      <span className="type-body-sm truncate font-semibold text-gold">{value}</span>
     </div>
   );
 }

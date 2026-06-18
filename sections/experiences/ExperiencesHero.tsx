@@ -6,8 +6,11 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { experiencesPageHero } from "@/data";
 import { Container } from "@/components/ui/Container";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function ExperiencesHero() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section
       className="relative flex min-h-screen flex-col overflow-hidden"
@@ -18,7 +21,7 @@ export function ExperiencesHero() {
           src={experiencesPageHero.backgroundImage}
           alt={experiencesPageHero.backgroundAlt}
           fill
-          loading="lazy"
+          priority
           className="object-cover object-center"
           sizes="100vw"
         />
@@ -28,16 +31,14 @@ export function ExperiencesHero() {
 
       <Container className="relative z-10 flex flex-1 flex-col justify-center py-28 md:py-32">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-xl"
         >
           <p className="label-caps text-white/80">{experiencesPageHero.eyebrow}</p>
-          <h1 className="mt-4 font-display text-[2rem] leading-[1.15] text-white md:text-[3rem] lg:text-[3.5rem]">
-            {experiencesPageHero.title}
-          </h1>
-          <p className="mt-5 max-w-lg font-body text-base leading-relaxed text-white/85 md:mt-6 md:text-lg">
+          <h1 className="type-display-lg mt-4 text-white">{experiencesPageHero.title}</h1>
+          <p className="type-body mt-5 max-w-lg text-white/85 md:mt-6">
             {experiencesPageHero.description}
           </p>
           <Link

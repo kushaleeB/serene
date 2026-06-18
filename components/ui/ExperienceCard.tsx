@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { memo } from "react";
 import type { Experience } from "@/types";
 import { cn } from "@/utils/cn";
 
@@ -7,7 +8,10 @@ interface ExperienceCardProps {
   className?: string;
 }
 
-export function ExperienceCard({ experience, className }: ExperienceCardProps) {
+export const ExperienceCard = memo(function ExperienceCard({
+  experience,
+  className,
+}: ExperienceCardProps) {
   return (
     <article className={cn("group flex h-full min-w-0 flex-col", className)}>
       <div className="relative aspect-[4/3] shrink-0 overflow-hidden rounded-[1rem]">
@@ -26,12 +30,10 @@ export function ExperienceCard({ experience, className }: ExperienceCardProps) {
           {experience.badge}
         </span>
       </div>
-      <h3 className="mt-4 font-display text-[clamp(1.0625rem,2vw+0.5rem,1.25rem)] leading-tight text-primary-container">
-        {experience.title}
-      </h3>
-      <p className="mt-2 flex-1 text-pretty text-sm leading-relaxed text-body-muted md:text-[0.9375rem]">
+      <h3 className="type-display-sm mt-4 text-primary-container">{experience.title}</h3>
+      <p className="type-body-sm mt-2 flex-1 text-pretty text-body-muted">
         {experience.description}
       </p>
     </article>
   );
-}
+});

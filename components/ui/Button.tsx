@@ -1,13 +1,14 @@
 import { cn } from "@/utils/cn";
 import Link from "next/link";
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, MouseEventHandler } from "react";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "outline";
 
-interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
+interface ButtonProps extends Omit<ComponentPropsWithoutRef<"button">, "onClick"> {
   variant?: ButtonVariant;
   href?: string;
   className?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 }
 
 const variants: Record<ButtonVariant, string> = {
@@ -29,21 +30,35 @@ export function Button({
   ...props
 }: ButtonProps) {
   const classes = cn(
-    "inline-flex items-center justify-center rounded-full px-8 py-3.5 text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2",
+    "type-btn inline-flex items-center justify-center rounded-full transition-colors duration-300",
+    "[@media(hover:hover)]:hover:scale-[1.02]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2",
     variants[variant],
     className
   );
 
   if (href) {
+    const { onClick } = props;
     return (
-      <Link href={href} className={classes}>
+      <Link
+        href={href}
+        className={classes}
+        onClick={onClick as ComponentPropsWithoutRef<typeof Link>["onClick"] | undefined}
+      >
         {children}
       </Link>
     );
   }
 
+  const { onClick, ...buttonProps } = props;
+
   return (
-    <button type="button" className={classes} {...props}>
+    <button
+      type="button"
+      className={classes}
+      onClick={onClick as MouseEventHandler<HTMLButtonElement> | undefined}
+      {...buttonProps}
+    >
       {children}
     </button>
   );

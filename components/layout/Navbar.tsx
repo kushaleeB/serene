@@ -223,7 +223,7 @@ export function Navbar() {
                           ref={i === 0 ? firstNavLinkRef : undefined}
                           href={link.href}
                           className={cn(
-                            "inline-block font-display text-3xl text-white transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary",
+                            "inline-block type-display-md text-white transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary",
                             active && "border-b border-white/60 pb-1"
                           )}
                           aria-current={active ? "page" : undefined}
@@ -250,7 +250,7 @@ export function Navbar() {
                 <Link
                   href={reserveCta.href}
                   className={cn(
-                    "inline-flex w-full items-center justify-center rounded-full px-8 py-3.5 text-sm font-medium transition-all duration-300",
+                    "type-btn inline-flex w-full items-center justify-center rounded-full",
                     "bg-white text-primary hover:bg-white/90",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
                   )}

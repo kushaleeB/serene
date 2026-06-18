@@ -6,6 +6,7 @@ import { villas } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { VillaCard } from "@/components/ui/VillaCard";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 interface VillasListingProps {
@@ -21,6 +22,8 @@ export function VillasListing({
   showHeader = true,
   sectionId,
 }: VillasListingProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section
       id={sectionId}
@@ -34,13 +37,10 @@ export function VillasListing({
         {showHeader ? (
           <div className="mx-auto max-w-2xl text-center">
             <p className="label-caps text-gold">{content.eyebrow}</p>
-            <h2
-              id="villas-heading"
-              className="mt-3 font-display text-[clamp(1.5rem,3vw+0.75rem,2rem)] leading-[1.3] text-primary-container"
-            >
+            <h2 id="villas-heading" className="type-display-lg mt-3 text-primary-container">
               {content.title}
             </h2>
-            <p className="mt-4 text-pretty font-body text-base leading-relaxed text-body-muted md:text-[1.0625rem]">
+            <p className="type-body mt-4 text-pretty text-body-muted">
               {content.description}
             </p>
           </div>
@@ -59,10 +59,13 @@ export function VillasListing({
           {villas.map((villa, i) => (
             <motion.li
               key={villa.id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, delay: i * 0.08 }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.55,
+                delay: prefersReducedMotion ? 0 : i * 0.08,
+              }}
               className="flex min-w-0"
             >
               <VillaCard villa={villa} className="h-full w-full" />
@@ -72,10 +75,10 @@ export function VillasListing({
 
         {showCta && (
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.2 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.55, delay: prefersReducedMotion ? 0 : 0.2 }}
             className="mt-10 flex justify-center md:mt-12"
           >
             <Button

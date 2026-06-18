@@ -12,10 +12,8 @@ export function VillasPageHero({ eyebrow, title, description }: VillasPageHeroPr
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="label-caps text-gold">{eyebrow}</p>
-          <h1 className="mt-3 font-display text-[2rem] leading-[1.2] text-primary-container md:text-[2.5rem]">
-            {title}
-          </h1>
-          <p className="mt-4 font-body text-base leading-relaxed text-body-muted md:text-lg">
+          <h1 className="type-display-lg mt-3 text-primary-container">{title}</h1>
+          <p className="type-body mt-4 text-body-muted">
             {description}
           </p>
         </div>

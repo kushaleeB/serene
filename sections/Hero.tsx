@@ -6,40 +6,30 @@ import { heroContent } from "@/data";
 import { BookingBar } from "@/components/layout/BookingBar";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 const EASE: Transition["ease"] = [0.22, 1, 0.36, 1];
 
-function useCompactHeroMotion() {
+function useCompactViewport() {
   const [isCompact, setIsCompact] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const compactQuery = window.matchMedia("(max-width: 767px)");
-
-    const updateMotion = () => setPrefersReducedMotion(motionQuery.matches);
     const updateCompact = () => setIsCompact(compactQuery.matches);
-
-    updateMotion();
     updateCompact();
-
-    motionQuery.addEventListener("change", updateMotion);
     compactQuery.addEventListener("change", updateCompact);
-
-    return () => {
-      motionQuery.removeEventListener("change", updateMotion);
-      compactQuery.removeEventListener("change", updateCompact);
-    };
+    return () => compactQuery.removeEventListener("change", updateCompact);
   }, []);
 
-  return { isCompact, prefersReducedMotion };
+  return isCompact;
 }
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoReady, setIsVideoReady] = useState(false);
-  const { isCompact, prefersReducedMotion } = useCompactHeroMotion();
+  const isCompact = useCompactViewport();
+  const prefersReducedMotion = useReducedMotion();
 
   const fadeUp = useMemo<Variants>(
     () => ({
@@ -115,6 +105,8 @@ export function Hero() {
           loop
           playsInline
           preload="auto"
+          // @ts-expect-error fetchPriority is valid on video in modern browsers
+          fetchPriority="high"
           className={cn(
             "h-full w-full object-cover object-center transition-opacity duration-700",
             isVideoReady ? "opacity-100" : "opacity-0"
@@ -134,22 +126,10 @@ export function Hero() {
           variants={fadeUp}
           className="mx-auto w-full max-w-3xl"
         >
-          <h1
-            className={cn(
-              "font-display text-balance break-words tracking-[-0.02em] text-white",
-              "text-[clamp(2rem,5.5vw+0.75rem,4rem)] leading-[1.08]",
-              "max-w-[14ch] mx-auto sm:max-w-none sm:leading-[1.1] md:mx-auto"
-            )}
-          >
+          <h1 className="type-display-hero mx-auto max-w-[14ch] text-balance break-words text-white sm:max-w-none">
             {heroContent.headline}
           </h1>
-          <p
-            className={cn(
-              "mx-auto mt-4 max-w-xl text-pretty font-body leading-relaxed text-white/85",
-              "text-[clamp(0.9375rem,1.6vw+0.65rem,1.125rem)]",
-              "sm:mt-5 md:mt-6"
-            )}
-          >
+          <p className="type-body mx-auto mt-4 max-w-xl text-pretty text-white/85 sm:mt-5 md:mt-6">
             {heroContent.subheadline}
           </p>
 
@@ -182,9 +162,11 @@ export function Hero() {
             variants={fadeIn}
             transition={{ delay: prefersReducedMotion ? 0 : isCompact ? 0.12 : 0.4 }}
             className="mt-6 flex flex-col items-center justify-center gap-1.5 sm:mt-8 sm:flex-row sm:gap-2 md:mt-10"
+            role="group"
+            aria-label={heroContent.ratingText}
           >
-            <StarRating rating={heroContent.rating} />
-            <span className="max-w-[16rem] text-center text-pretty text-sm text-white/90 sm:max-w-none">
+            <StarRating rating={heroContent.rating} label={`${heroContent.rating} out of 5 stars`} />
+            <span className="type-body-sm max-w-[16rem] text-center text-pretty text-white/90 sm:max-w-none">
               {heroContent.ratingText}
             </span>
           </motion.div>

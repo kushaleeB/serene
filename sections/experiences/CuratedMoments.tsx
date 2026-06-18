@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import { curatedMomentsContent, experiences } from "@/data";
 import { Container } from "@/components/ui/Container";
 import { ExperienceCard } from "@/components/ui/ExperienceCard";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function CuratedMoments() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section
       id="curated-moments"
@@ -15,7 +18,7 @@ export function CuratedMoments() {
       <Container>
         <h2
           id="curated-moments-heading"
-          className="text-center font-display text-[clamp(1.5rem,3vw+0.75rem,2rem)] leading-[1.25] text-primary-container"
+          className="type-display-lg text-center text-primary-container"
         >
           {curatedMomentsContent.title}
         </h2>
@@ -24,10 +27,13 @@ export function CuratedMoments() {
           {experiences.map((experience, i) => (
             <motion.li
               key={experience.id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.6, delay: i * 0.08 }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.6,
+                delay: prefersReducedMotion ? 0 : i * 0.08,
+              }}
               className="flex min-w-0"
             >
               <ExperienceCard experience={experience} className="w-full" />

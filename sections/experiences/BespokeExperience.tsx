@@ -6,8 +6,11 @@ import { motion } from "framer-motion";
 import { bespokeExperienceContent } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function BespokeExperience() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section
       className="bg-[#f5f3f3] section-py"
@@ -16,21 +19,18 @@ export function BespokeExperience() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
+            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.7 }}
           >
             <p className="label-caps text-primary-container">
               {bespokeExperienceContent.eyebrow}
             </p>
-            <h2
-              id="bespoke-heading"
-              className="mt-3 font-display text-[1.75rem] leading-[1.3] text-primary-container md:text-[2rem]"
-            >
+            <h2 id="bespoke-heading" className="type-display-lg mt-3 text-primary-container">
               {bespokeExperienceContent.title}
             </h2>
-            <p className="mt-5 font-body text-base leading-relaxed text-body-muted">
+            <p className="type-body mt-5 text-body-muted">
               {bespokeExperienceContent.description}
             </p>
             <ul className="mt-6 space-y-3">
@@ -51,10 +51,10 @@ export function BespokeExperience() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
+            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.1 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.7, delay: prefersReducedMotion ? 0 : 0.1 }}
             className="relative mx-auto aspect-square w-full max-w-md lg:max-w-none"
           >
             <div className="relative h-full w-full overflow-hidden rounded-full shadow-[var(--shadow-soft)]">

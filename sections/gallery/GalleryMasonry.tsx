@@ -1,32 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { galleryImages, galleryPageContent } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 import type { GalleryImage } from "@/types";
 
 export function GalleryMasonry() {
   const [activeImage, setActiveImage] = useState<GalleryImage | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  useFocusTrap(Boolean(activeImage), dialogRef, () => setActiveImage(null));
 
   useEffect(() => {
     if (!activeImage) return;
 
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setActiveImage(null);
-    }
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
+
+    const focusTimer = window.setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 80);
 
     return () => {
+      window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [activeImage]);
 
@@ -47,10 +53,13 @@ export function GalleryMasonry() {
             {galleryImages.map((image, i) => (
               <motion.li
                 key={image.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.04 }}
+                transition={{
+                  duration: prefersReducedMotion ? 0 : 0.5,
+                  delay: prefersReducedMotion ? 0 : i * 0.04,
+                }}
                 className={cn("min-w-0", image.gridClass)}
               >
                 <button
@@ -58,7 +67,8 @@ export function GalleryMasonry() {
                   onClick={() => setActiveImage(image)}
                   className={cn(
                     "group relative block h-full w-full overflow-hidden rounded-2xl text-left",
-                    "aspect-[4/3] lg:aspect-auto lg:min-h-full"
+                    "aspect-[4/3] lg:aspect-auto lg:min-h-full",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
                   )}
                   aria-label={`View photo: ${image.alt}`}
                 >
@@ -107,10 +117,11 @@ export function GalleryMasonry() {
       <AnimatePresence>
         {activeImage && (
           <motion.div
-            initial={{ opacity: 0 }}
+            ref={dialogRef}
+            initial={{ opacity: prefersReducedMotion ? 1 : 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            exit={{ opacity: prefersReducedMotion ? 1 : 0 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 md:p-5"
             onClick={() => setActiveImage(null)}
             role="dialog"
@@ -118,18 +129,19 @@ export function GalleryMasonry() {
             aria-label={activeImage.alt}
           >
             <button
+              ref={closeButtonRef}
               type="button"
-              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 md:right-5 md:top-5"
+              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold md:right-5 md:top-5"
               onClick={() => setActiveImage(null)}
               aria-label="Close photo"
             >
-              <X size={24} />
+              <X size={24} aria-hidden="true" />
             </button>
             <motion.div
-              initial={{ scale: 0.96, opacity: 0 }}
+              initial={{ scale: prefersReducedMotion ? 1 : 0.96, opacity: prefersReducedMotion ? 1 : 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.96, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ scale: prefersReducedMotion ? 1 : 0.96, opacity: prefersReducedMotion ? 1 : 0 }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="relative h-[min(85dvh,720px)] w-full max-w-5xl overflow-hidden rounded-2xl"
               onClick={(event) => event.stopPropagation()}
             >

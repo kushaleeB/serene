@@ -6,10 +6,12 @@ import { motion } from "framer-motion";
 import { testimonials, testimonialsContent } from "@/data";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { Container } from "@/components/ui/Container";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 export function Testimonials() {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const scrollCarousel = useCallback((direction: "prev" | "next") => {
     const node = carouselRef.current;
@@ -17,9 +19,9 @@ export function Testimonials() {
     const offset = Math.max(node.clientWidth * 0.88, 280);
     node.scrollBy({
       left: direction === "next" ? offset : -offset,
-      behavior: "smooth",
+      behavior: prefersReducedMotion ? "auto" : "smooth",
     });
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section
@@ -30,10 +32,7 @@ export function Testimonials() {
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="label-caps text-gold">{testimonialsContent.eyebrow}</p>
-          <h2
-            id="testimonials-heading"
-            className="mt-3 font-display text-[clamp(1.5rem,3vw+0.75rem,2rem)] leading-[1.3] text-primary-container"
-          >
+          <h2 id="testimonials-heading" className="type-display-lg mt-3 text-primary-container">
             {testimonialsContent.title}
           </h2>
         </div>
@@ -42,10 +41,13 @@ export function Testimonials() {
           {testimonials.map((testimonial, i) => (
             <motion.li
               key={testimonial.id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.6, delay: i * 0.08 }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.6,
+                delay: prefersReducedMotion ? 0 : i * 0.08,
+              }}
               className={cn("flex min-w-0", i === 2 && "md:col-span-2 md:max-w-md md:justify-self-center lg:col-span-1 lg:max-w-none")}
             >
               <TestimonialCard testimonial={testimonial} className="w-full" />
@@ -78,7 +80,7 @@ export function Testimonials() {
             <button
               type="button"
               onClick={() => scrollCarousel("prev")}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-heading transition-colors hover:border-primary-container hover:bg-surface-linen"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-heading transition-colors hover:border-primary-container hover:bg-surface-linen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
               aria-label="Previous testimonial"
             >
               <ChevronLeft size={18} strokeWidth={1.5} />
@@ -86,7 +88,7 @@ export function Testimonials() {
             <button
               type="button"
               onClick={() => scrollCarousel("next")}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-heading transition-colors hover:border-primary-container hover:bg-surface-linen"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-heading transition-colors hover:border-primary-container hover:bg-surface-linen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
               aria-label="Next testimonial"
             >
               <ChevronRight size={18} strokeWidth={1.5} />

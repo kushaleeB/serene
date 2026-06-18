@@ -6,9 +6,12 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { storyContent } from "@/data";
 import { Container } from "@/components/ui/Container";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/utils/cn";
 
 export function Story() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section
       id="story"
@@ -18,10 +21,10 @@ export function Story() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
+            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="relative mx-auto w-full max-w-md lg:max-w-none"
           >
             <div
@@ -41,24 +44,22 @@ export function Story() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
+            initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion ? 0 : 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: prefersReducedMotion ? 0 : 0.7,
+              delay: prefersReducedMotion ? 0 : 0.1,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="lg:py-4"
           >
-            <h2
-              id="story-heading"
-              className="font-display text-[1.75rem] leading-[1.3] text-heading md:text-[2rem]"
-            >
+            <h2 id="story-heading" className="type-display-lg text-heading">
               {storyContent.title}
             </h2>
             <div className="mt-6 space-y-5">
               {storyContent.paragraphs.map((paragraph, i) => (
-                <p
-                  key={i}
-                  className="font-body text-base leading-[1.7] text-body-muted md:text-[1.0625rem]"
-                >
+                <p key={i} className="type-body text-body-muted">
                   {paragraph}
                 </p>
               ))}

@@ -30,7 +30,7 @@ export function Footer() {
               sizes="120px"
               className="h-7 w-auto brightness-0 invert"
             />
-            <p className="max-w-xs text-pretty text-sm leading-relaxed text-white/70">
+            <p className="type-body-sm max-w-xs text-pretty text-white/70">
               {footerContent.brandDescription}
             </p>
             <Globe size={18} className="text-white/50" strokeWidth={1.5} aria-hidden="true" />
@@ -70,7 +70,7 @@ export function Footer() {
             <h3 className="mb-2 font-body text-sm font-semibold text-white">
               {footerContent.newsletter.title}
             </h3>
-            <p className="mb-4 text-pretty text-sm leading-relaxed text-white/70">
+            <p className="type-body-sm mb-4 text-pretty text-white/70">
               {footerContent.newsletter.description}
             </p>
             <form
@@ -84,13 +84,14 @@ export function Footer() {
                 id="newsletter-email"
                 type="email"
                 placeholder={footerContent.newsletter.placeholder}
-                className="min-h-11 w-full bg-transparent pr-12 text-sm text-white placeholder:text-white/40 focus:outline-none"
+                className="min-h-11 w-full bg-transparent pr-12 text-sm text-white placeholder:text-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
               />
               <button
                 type="submit"
                 className={cn(
                   "absolute right-0 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center",
-                  "text-white/70 transition-colors hover:text-white"
+                  "text-white/70 transition-colors hover:text-white",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                 )}
                 aria-label={footerContent.newsletter.buttonLabel}
               >

@@ -50,16 +50,16 @@ export function TestimonialCard({ testimonial, className, priority = false }: Te
           )}
         </div>
         <div className="min-w-0">
-          <h3 className="truncate font-display text-lg text-primary-container">{testimonial.name}</h3>
-          <p className="text-sm text-body-muted">{testimonial.country}</p>
+          <h3 className="type-display-sm truncate text-primary-container">{testimonial.name}</h3>
+          <p className="type-body-sm text-body-muted">{testimonial.country}</p>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2" aria-label={`Rated ${testimonial.rating} out of 5`}>
-        <StarRating rating={testimonial.rating} size={14} />
+      <div className="mt-4">
+        <StarRating rating={testimonial.rating} size={14} label={`Rated ${testimonial.rating} out of 5`} />
       </div>
 
-      <blockquote className="mt-4 flex-1 text-pretty text-sm leading-relaxed text-body-muted md:text-[0.9375rem]">
+      <blockquote className="type-body-sm mt-4 flex-1 text-pretty text-body-muted">
         &ldquo;{testimonial.review}&rdquo;
       </blockquote>
     </article>

@@ -4,9 +4,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { contactPageContent } from "@/data";
 import { Container } from "@/components/ui/Container";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function ContactHero() {
   const { hero } = contactPageContent;
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section
@@ -18,7 +20,7 @@ export function ContactHero() {
           src={hero.backgroundImage}
           alt={hero.backgroundAlt}
           fill
-          loading="lazy"
+          priority
           className="object-cover object-center"
           sizes="100vw"
         />
@@ -28,15 +30,13 @@ export function ContactHero() {
 
       <Container className="relative z-10 flex flex-1 flex-col justify-center py-28 md:py-32">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-xl"
         >
-          <h1 className="font-display text-[2.25rem] leading-[1.15] text-white md:text-[3rem] lg:text-[3.25rem]">
-            {hero.title}
-          </h1>
-          <p className="mt-5 max-w-lg font-body text-base leading-relaxed text-white/85 md:mt-6 md:text-lg">
+          <h1 className="type-display-lg text-white">{hero.title}</h1>
+          <p className="type-body mt-5 max-w-lg text-white/85 md:mt-6">
             {hero.description}
           </p>
         </motion.div>

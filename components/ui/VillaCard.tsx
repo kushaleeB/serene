@@ -1,13 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import type { Villa } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { VillaDetailModal } from "@/components/ui/VillaDetailModal";
 import { cn } from "@/utils/cn";
+
+const VillaDetailModal = dynamic(
+  () => import("@/components/ui/VillaDetailModal").then((mod) => mod.VillaDetailModal),
+  { ssr: false }
+);
 
 interface VillaCardProps {
   villa: Villa;
@@ -43,25 +48,23 @@ export function VillaCard({ villa, className }: VillaCardProps) {
 
         <div className="flex min-h-0 flex-1 flex-col p-5 sm:p-6">
           <div className="flex items-start justify-between gap-3">
-            <h3 className="min-w-0 flex-1 font-display text-lg leading-tight text-primary-container sm:text-xl">
+            <h3 className="type-display-sm min-w-0 flex-1 text-primary-container">
               {villa.name}
             </h3>
             <div className="shrink-0 text-right">
-              <p className="text-xs text-body-muted">From</p>
-              <p className="font-display text-sm text-gold">
+              <p className="type-body-sm text-body-muted">From</p>
+              <p className="font-display text-sm text-gold md:text-base">
                 ${villa.price} / Night
               </p>
             </div>
           </div>
 
-          <p className="mt-2 flex items-center gap-1.5 text-xs text-body-muted">
+          <p className="mt-2 flex items-center gap-1.5 type-body-sm text-body-muted">
             <MapPin size={14} strokeWidth={1.5} className="shrink-0" aria-hidden="true" />
             <span className="truncate">{villa.location}</span>
           </p>
 
-          <p className="mt-4 flex-1 text-pretty text-sm leading-relaxed text-body-muted">
-            {villa.description}
-          </p>
+          <p className="type-body-sm mt-4 flex-1 text-pretty text-body-muted">{villa.description}</p>
 
           <div className="my-5 h-px bg-stone-200" aria-hidden="true" />
 
@@ -69,7 +72,7 @@ export function VillaCard({ villa, className }: VillaCardProps) {
             {villa.amenities.map((amenity) => (
               <li
                 key={amenity.label}
-                className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-[#e8f3ef] px-3 py-1.5 text-xs font-medium text-primary-container"
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-[#e8f3ef] px-3 py-1.5 text-xs font-medium text-primary-container md:text-sm"
               >
                 <Icon name={amenity.icon} size={13} className="text-primary-container" />
                 {amenity.label}
@@ -80,7 +83,7 @@ export function VillaCard({ villa, className }: VillaCardProps) {
           <div className="mt-6 pt-0">
             <Button
               variant="outline"
-              className="min-h-11 w-full py-3.5 text-sm"
+              className="min-h-11 w-full"
               onClick={() => setIsDetailOpen(true)}
             >
               {villa.cta.label}
@@ -89,7 +92,9 @@ export function VillaCard({ villa, className }: VillaCardProps) {
         </div>
       </article>
 
-      <VillaDetailModal villa={isDetailOpen ? villa : null} onClose={() => setIsDetailOpen(false)} />
+      {isDetailOpen && (
+        <VillaDetailModal villa={villa} onClose={() => setIsDetailOpen(false)} />
+      )}
     </>
   );
 }
