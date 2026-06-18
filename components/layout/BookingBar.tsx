@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { bookingBarLabels, bookingConfig } from "@/data";
 import { Button } from "@/components/ui/Button";
 import { CalendarPopover } from "@/components/ui/CalendarPopover";
+import { GuestSelectorPopover } from "@/components/ui/GuestSelectorPopover";
 import { cn } from "@/utils/cn";
 import {
   addDays,
@@ -13,33 +14,39 @@ import {
   isBeforeDay,
   startOfDay,
 } from "@/utils/date";
+import { formatGuestSummary } from "@/utils/guests";
 
 interface BookingBarProps {
   className?: string;
   id?: string;
 }
 
-type CalendarField = "checkIn" | "checkOut";
+type ActivePopover = "checkIn" | "checkOut" | "guests" | null;
+
+const DEFAULT_ADULTS = 2;
+const DEFAULT_CHILDREN = 1;
 
 export function BookingBar({ className, id }: BookingBarProps) {
   const today = startOfDay(new Date());
   const [checkIn, setCheckIn] = useState(getDefaultCheckInDate);
   const [checkOut, setCheckOut] = useState(() => getDefaultCheckOutDate(getDefaultCheckInDate()));
-  const [activeCalendar, setActiveCalendar] = useState<CalendarField | null>(null);
+  const [adults, setAdults] = useState(DEFAULT_ADULTS);
+  const [children, setChildren] = useState(DEFAULT_CHILDREN);
+  const [activePopover, setActivePopover] = useState<ActivePopover>(null);
   const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!activeCalendar) return;
+    if (!activePopover) return;
 
     function handlePointerDown(event: MouseEvent) {
       if (!barRef.current?.contains(event.target as Node)) {
-        setActiveCalendar(null);
+        setActivePopover(null);
       }
     }
 
     document.addEventListener("mousedown", handlePointerDown);
     return () => document.removeEventListener("mousedown", handlePointerDown);
-  }, [activeCalendar]);
+  }, [activePopover]);
 
   function handleCheckInSelect(date: Date) {
     setCheckIn(date);
@@ -49,15 +56,12 @@ export function BookingBar({ className, id }: BookingBarProps) {
     }
   }
 
-  function handleCheckOutSelect(date: Date) {
-    setCheckOut(date);
-  }
-
-  function toggleCalendar(field: CalendarField) {
-    setActiveCalendar((current) => (current === field ? null : field));
+  function togglePopover(field: ActivePopover) {
+    setActivePopover((current) => (current === field ? null : field));
   }
 
   const checkOutMinDate = addDays(checkIn, bookingConfig.minNights);
+  const guestSummary = formatGuestSummary(adults, children);
 
   return (
     <div
@@ -71,45 +75,61 @@ export function BookingBar({ className, id }: BookingBarProps) {
       aria-label="Check villa availability"
     >
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-0">
-        <DateField
+        <PopoverField
           label={bookingBarLabels.checkIn}
           value={formatDisplayDate(checkIn)}
-          isActive={activeCalendar === "checkIn"}
-          onClick={() => toggleCalendar("checkIn")}
+          isActive={activePopover === "checkIn"}
+          onClick={() => togglePopover("checkIn")}
         >
-          {activeCalendar === "checkIn" && (
+          {activePopover === "checkIn" && (
             <CalendarPopover
               label={bookingBarLabels.checkIn}
               selected={checkIn}
               minDate={today}
               onSelect={handleCheckInSelect}
-              onClose={() => setActiveCalendar(null)}
+              onClose={() => setActivePopover(null)}
             />
           )}
-        </DateField>
+        </PopoverField>
 
         <Divider />
 
-        <DateField
+        <PopoverField
           label={bookingBarLabels.checkOut}
           value={formatDisplayDate(checkOut)}
-          isActive={activeCalendar === "checkOut"}
-          onClick={() => toggleCalendar("checkOut")}
+          isActive={activePopover === "checkOut"}
+          onClick={() => togglePopover("checkOut")}
         >
-          {activeCalendar === "checkOut" && (
+          {activePopover === "checkOut" && (
             <CalendarPopover
               label={bookingBarLabels.checkOut}
               selected={checkOut}
               minDate={checkOutMinDate}
-              onSelect={handleCheckOutSelect}
-              onClose={() => setActiveCalendar(null)}
+              onSelect={setCheckOut}
+              onClose={() => setActivePopover(null)}
             />
           )}
-        </DateField>
+        </PopoverField>
 
         <Divider />
 
-        <BookingField label={bookingBarLabels.guests} value={bookingBarLabels.guestsValue} />
+        <PopoverField
+          label={bookingBarLabels.guests}
+          value={guestSummary}
+          isActive={activePopover === "guests"}
+          onClick={() => togglePopover("guests")}
+        >
+          {activePopover === "guests" && (
+            <GuestSelectorPopover
+              adults={adults}
+              children={children}
+              maxGuests={bookingConfig.maxGuests}
+              onAdultsChange={setAdults}
+              onChildrenChange={setChildren}
+              onClose={() => setActivePopover(null)}
+            />
+          )}
+        </PopoverField>
 
         <div className="shrink-0 md:ml-4">
           <Button
@@ -124,7 +144,7 @@ export function BookingBar({ className, id }: BookingBarProps) {
   );
 }
 
-function DateField({
+function PopoverField({
   label,
   value,
   isActive,
@@ -155,19 +175,6 @@ function DateField({
       </button>
       {children}
     </div>
-  );
-}
-
-function BookingField({ label, value }: { label: string; value: string }) {
-  return (
-    <button
-      type="button"
-      className="flex min-w-0 flex-1 flex-col px-3 py-1 text-left transition-opacity hover:opacity-80 md:px-5"
-      aria-label={`${label}: ${value}`}
-    >
-      <span className="label-caps text-[0.625rem] text-body-muted">{label}</span>
-      <span className="truncate text-sm font-semibold text-heading">{value}</span>
-    </button>
   );
 }
 

@@ -14,9 +14,9 @@ import { Container } from "@/components/ui/Container";
 export function Footer() {
   return (
     <footer className="bg-primary text-white/90" aria-label="Site footer">
-      <Container as="div" className="section-py pb-8 pt-16 md:pt-20">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          <div className="space-y-4">
+      <Container as="div" className="py-10 md:py-12">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <div className="space-y-3">
             <Image
               src={siteConfig.logo}
               alt={siteConfig.logoAlt}
@@ -31,10 +31,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 font-body text-sm font-semibold text-white">
+            <h3 className="mb-3 font-body text-sm font-semibold text-white">
               {footerContent.exploreTitle}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {footerExploreLinks.map((link) => (
                 <li key={link.sectionId}>
                   <Link
@@ -49,10 +49,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 font-body text-sm font-semibold text-white">
+            <h3 className="mb-3 font-body text-sm font-semibold text-white">
               {footerContent.legalTitle}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {footerLegalLinks.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -70,7 +70,7 @@ export function Footer() {
             <h3 className="mb-2 font-body text-sm font-semibold text-white">
               {footerContent.newsletter.title}
             </h3>
-            <p className="mb-4 text-sm leading-relaxed text-white/70">
+            <p className="mb-3 text-sm leading-relaxed text-white/70">
               {footerContent.newsletter.description}
             </p>
             <form
@@ -97,7 +97,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/15 pt-8 text-center">
+        <div className="mt-8 border-t border-white/15 pt-5 text-center">
           <p className="text-xs text-white/50">{footerContent.copyright}</p>
         </div>
       </Container>

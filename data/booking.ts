@@ -17,4 +17,9 @@ export const bookingBarLabels = {
   checkOutValue: "Oct 31, 2024",
   guestsValue: "2 Adults, 1 Child",
   cta: "Check Availability",
+  adults: "Adults",
+  adultsHint: "Ages 13+",
+  children: "Children",
+  childrenHint: "Ages 2–12",
+  done: "Done",
 };

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { BookingBar } from "@/components/layout/BookingBar";
 import { experiencesPageHero } from "@/data";
 import { Container } from "@/components/ui/Container";
 
@@ -27,7 +26,7 @@ export function ExperiencesHero() {
         <div className="hero-overlay-bottom absolute inset-0" />
       </div>
 
-      <Container className="relative z-10 flex flex-1 flex-col justify-center pb-36 pt-28 md:pb-44 md:pt-32">
+      <Container className="relative z-10 flex flex-1 flex-col justify-center py-28 md:py-32">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,17 +49,6 @@ export function ExperiencesHero() {
           </Link>
         </motion.div>
       </Container>
-
-      <div className="absolute inset-x-0 bottom-0 z-20 px-5 pb-8 md:px-6 md:pb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto w-full max-w-4xl"
-        >
-          <BookingBar />
-        </motion.div>
-      </div>
     </section>
   );
 }
