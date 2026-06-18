@@ -154,7 +154,6 @@ export interface HeroContent {
   secondaryCta: { label: string; href: string };
   backgroundImage: string;
   backgroundImageAlt: string;
-  backgroundVideo?: string;
 }
 
 export interface StoryContent {
@@ -174,4 +173,5 @@ export interface CtaBannerContent {
   secondaryCta: { label: string; href: string };
 }
 
+export type { ContactPageContent, ContactFormContent, ContactInfoContent, ContactPageHeroContent } from "./contact";
 export type { FooterContent, FooterLegalLink, NewsletterContent } from "./footer";

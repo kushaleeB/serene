@@ -6,14 +6,14 @@ export const navLinks: NavLink[] = [
   { label: "Villas", href: "/villas", sectionId: "villas" },
   { label: "Experiences", href: "/experiences", sectionId: "experiences" },
   { label: "Gallery", href: "/gallery", sectionId: "gallery" },
-  { label: "Contact", href: "/#contact", sectionId: "contact" },
+  { label: "Contact", href: "/contact", sectionId: "contact" },
 ];
 
 export const footerExploreLinks: NavLink[] = [
   { label: "Villas", href: "/villas", sectionId: "villas" },
   { label: "Experiences", href: "/experiences", sectionId: "experiences" },
   { label: "Gallery", href: "/gallery", sectionId: "gallery" },
-  { label: "Contact", href: "/#contact", sectionId: "contact" },
+  { label: "Contact", href: "/contact", sectionId: "contact" },
 ];
 
 export const footerLegalLinks: FooterLegalLink[] = [

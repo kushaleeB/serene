@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { heroContent } from "@/data";
@@ -8,19 +7,6 @@ import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
 
 export function Hero() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
-
-    updatePreference();
-    mediaQuery.addEventListener("change", updatePreference);
-    return () => mediaQuery.removeEventListener("change", updatePreference);
-  }, []);
-
-  const showVideo = Boolean(heroContent.backgroundVideo) && !prefersReducedMotion;
-
   return (
     <section
       id="home"
@@ -28,28 +14,14 @@ export function Hero() {
       aria-label="Hero"
     >
       <div className="absolute inset-0">
-        {showVideo ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster={heroContent.backgroundImage}
-            className="h-full w-full object-cover object-center"
-            aria-hidden="true"
-          >
-            <source src={heroContent.backgroundVideo} type="video/mp4" />
-          </video>
-        ) : (
-          <Image
-            src={heroContent.backgroundImage}
-            alt={heroContent.backgroundImageAlt}
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-        )}
+        <Image
+          src={heroContent.backgroundImage}
+          alt={heroContent.backgroundImageAlt}
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
         <div className="hero-overlay-top absolute inset-0" />
         <div className="hero-overlay-bottom absolute inset-0" />
       </div>

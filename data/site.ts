@@ -9,8 +9,8 @@ export const siteConfig: SiteConfig = {
   logoAlt: "SERENE luxury boutique villas",
   contact: {
     phone: "+94 77 123 4567",
-    email: "reservations@serene.lk",
-    address: "Thalpe, Galle, Southern Province, Sri Lanka",
+    email: "hello@serenevillas.com",
+    address: "Southern Coast, Sri Lanka",
   },
   social: [
     { platform: "instagram", href: "https://instagram.com", label: "Instagram" },
@@ -42,7 +42,6 @@ export const heroContent: HeroContent = {
   backgroundImage: "/img/hero/hero_img.png",
   backgroundImageAlt:
     "Luxury villa with infinity pool overlooking the Indian Ocean at dusk",
-  backgroundVideo: "/videos/hero.mp4",
 };
 
 export const storyContent: StoryContent = {

@@ -98,7 +98,7 @@ export const bespokeExperienceContent: BespokeExperienceContent = {
     "Private Transportation",
     "24/7 Concierge Service",
   ],
-  cta: { label: "Enquire Now", href: "/#contact" },
+  cta: { label: "Enquire Now", href: "/contact" },
   image: "/img/experiences/inquiry.png",
   imageAlt: "Romantic candlelit dinner set up on a beach at dusk",
 };

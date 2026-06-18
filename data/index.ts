@@ -17,4 +17,5 @@ export {
 export { galleryPageContent, galleryImages } from "./gallery";
 export { amenities } from "./amenities";
 export { testimonials } from "./testimonials";
+export { contactPageContent } from "./contact";
 export { bookingConfig, bookingBarLabels } from "./booking";
