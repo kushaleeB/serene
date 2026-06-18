@@ -5,7 +5,7 @@ export const contactPageContent: ContactPageContent = {
     title: "Begin Your Journey",
     description:
       "Our concierge team is available around the clock to help plan your perfect Sri Lankan getaway.",
-    backgroundImage: "/img/cta/hero_img.png",
+    backgroundImage: "/img/cta/hero.png",
     backgroundAlt: "Infinity pool at sunset overlooking the tropical Sri Lankan coastline",
   },
   info: {

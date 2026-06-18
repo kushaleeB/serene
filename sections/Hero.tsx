@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { heroContent } from "@/data";
+import { BookingBar } from "@/components/layout/BookingBar";
 import { Button } from "@/components/ui/Button";
 import { StarRating } from "@/components/ui/StarRating";
 import { cn } from "@/utils/cn";
@@ -48,7 +49,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-primary"
+      className="relative flex min-h-screen flex-col justify-center overflow-x-hidden bg-primary"
       aria-label="Hero"
     >
       <div className="absolute inset-0">
@@ -71,7 +72,7 @@ export function Hero() {
         <div className="hero-overlay-bottom absolute inset-0" />
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-20 pt-28 text-center md:px-6 md:pb-24 md:pt-32">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-36 pt-28 text-center md:px-6 md:pb-44 md:pt-32">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -108,6 +109,17 @@ export function Hero() {
             <StarRating rating={heroContent.rating} />
             <span className="text-sm text-white/90">{heroContent.ratingText}</span>
           </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0 z-20 px-5 pb-8 md:px-6 md:pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto w-full max-w-4xl"
+        >
+          <BookingBar id="booking" />
         </motion.div>
       </div>
     </section>

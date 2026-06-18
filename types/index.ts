@@ -35,6 +35,14 @@ export interface VillaAmenity {
   icon: string;
 }
 
+export interface VillaDetails {
+  guests: string;
+  size: string;
+  longDescription: string;
+  highlights: string[];
+  includes: string[];
+}
+
 export interface Villa {
   id: string;
   name: string;
@@ -45,6 +53,7 @@ export interface Villa {
   alt: string;
   description: string;
   amenities: VillaAmenity[];
+  details: VillaDetails;
   cta: {
     label: string;
     href: string;
